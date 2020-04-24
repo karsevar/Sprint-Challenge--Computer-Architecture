@@ -45,6 +45,7 @@ class CPU:
         # or equal to operations)
         JEQ = 0b01010101 # used to jump to an address if the E in the flag register is true 
         JNE = 0b01010110 # used to jump to an address if the E in the flag register is not true
+        JMP = 0b01010100 # used to jump to the address specified by the input register
 
 
         # initialize the instruction_branch dictionary that will hold all the 
@@ -63,6 +64,10 @@ class CPU:
         self.instruction_table[ADD] = self.handle_ADD
         self.instruction_table[CMP] = self.handle_CMP
         self.instruction_table[JEQ] = self.handle_JEQ
+        self.instruction_table[JMP] = self.handle_JMP
+
+    def handle_JMP(self):
+        self.pc = self.reg[self.ram[self.pc + 1]]
 
     def handle_JEQ(self):
         print('Flag value', self.FL == 0b00000001)
