@@ -65,6 +65,15 @@ class CPU:
         self.instruction_table[CMP] = self.handle_CMP
         self.instruction_table[JEQ] = self.handle_JEQ
         self.instruction_table[JMP] = self.handle_JMP
+        self.instruction_table[JNE] = self.handle_JNE
+
+    def handle_JNE(self):
+        flag_command = self.FL & 0b00000001
+
+        if flag_command == 0b00000000:
+            self.pc = self.reg[self.ram[self.pc + 1]]
+        else:
+            self.pc += 2
 
     def handle_JMP(self):
         self.pc = self.reg[self.ram[self.pc + 1]]
