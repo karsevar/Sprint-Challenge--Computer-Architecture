@@ -62,6 +62,16 @@ class CPU:
         self.instruction_table[RET] = self.handle_RET
         self.instruction_table[ADD] = self.handle_ADD
         self.instruction_table[CMP] = self.handle_CMP
+        self.instruction_table[JEQ] = self.handle_JEQ
+
+    def handle_JEQ(self):
+        print('Flag value', self.FL == 0b00000001)
+        flag_command = self.FL & 0b00000001
+
+        if flag_command == 0b00000001:
+            self.pc = self.reg[self.ram[self.pc + 1]]
+        else:
+            self.pc += 2
 
     def handle_CMP(self):
         print(f'CMP command has been called values to compare {self.reg[self.ram[self.pc + 1]]} {self.reg[self.ram[self.pc + 2]]}')
