@@ -79,7 +79,7 @@ class CPU:
         self.pc = self.reg[self.ram[self.pc + 1]]
 
     def handle_JEQ(self):
-        print('Flag value', self.FL == 0b00000001)
+        # print('Flag value', self.FL == 0b00000001)
         flag_command = self.FL & 0b00000001
 
         if flag_command == 0b00000001:
@@ -88,7 +88,7 @@ class CPU:
             self.pc += 2
 
     def handle_CMP(self):
-        print(f'CMP command has been called values to compare {self.reg[self.ram[self.pc + 1]]} {self.reg[self.ram[self.pc + 2]]}')
+        # print(f'CMP command has been called values to compare {self.reg[self.ram[self.pc + 1]]} {self.reg[self.ram[self.pc + 2]]}')
         self.alu('CMP', self.ram[self.pc + 1], self.ram[self.pc + 2])
 
     def handle_CALL(self):
