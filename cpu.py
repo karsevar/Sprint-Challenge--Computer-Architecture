@@ -26,6 +26,11 @@ class CPU:
         # zero
         self.pc = 0
 
+        # flag register 8 bit binary code where Less then is the bit in the 8th place, greater than 
+        # is the bit in the 2nd place, and E is the bit in the 1s place.
+        # initialized to a binary number of 0 
+        self.FL = 0b00000000
+
         ## moving the run instruction logic to the constructor:
         # opicode designations of functionality currently built out.
         LDI = 0b10000010 # used to save a specific value into the register 
@@ -36,6 +41,11 @@ class CPU:
         CALL = 0b01010000 # used to call subroutine at the address stored in the register
         RET = 0b00010001 # used to return from subroutine
         ADD = 0b10100000
+        CMP = 0b10100111 # used to compare two registers (used for greater than, less than, 
+        # or equal to operations)
+        JEQ = 0b01010101 # used to jump to an address if the E in the flag register is true 
+        JNE = 0b01010110 # used to jump to an address if the E in the flag register is not true
+
 
         # initialize the instruction_branch dictionary that will hold all the 
         # opcode functions indexed by the specific opcode.
@@ -51,6 +61,11 @@ class CPU:
         self.instruction_table[CALL] = self.handle_CALL 
         self.instruction_table[RET] = self.handle_RET
         self.instruction_table[ADD] = self.handle_ADD
+        self.instruction_table[CMP] = self.handle_CMP
+
+    def handle_CMP(self):
+        print(f'CMP command has been called values to compare {self.reg[self.ram[self.pc + 1]]} {self.reg[self.ram[self.pc + 2]]}')
+        self.alu('CMP', self.ram[self.pc + 1], self.ram[self.pc + 2])
 
     def handle_CALL(self):
         # first copy the current self.pc memory address and increment it by one address 
@@ -175,6 +190,11 @@ class CPU:
         elif op == 'MUL':
             self.reg[reg_a] *= self.reg[reg_b]
         #elif op == "SUB": etc
+        elif op == 'CMP':
+            if self.reg[reg_a] == self.reg[reg_b]:
+                self.FL = self.FL | 0b00000001
+            elif self.reg[reg_a] != self.reg[reg_b]:
+                self.FL = self.FL & 0b00000110
         else:
             raise Exception("Unsupported ALU operation")
 
